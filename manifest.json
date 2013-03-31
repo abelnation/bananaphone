@@ -1,0 +1,26 @@
+{
+	"AppDescription": {
+		"en": "Social Playlists like it was meant to be"
+	},
+	"AppIcon": {
+		"36x18": "icon.png"
+	},
+	"AppName": {
+		"en": "TheLiszt"
+	},
+	"BundleIdentifier": "api-tutorial",
+	"BundleType": "Application",
+	"BundleVersion": "0.1",
+	"Dependencies": {
+	  "api": "0.2.3",
+	  "util": "0.1.0",
+	  "resources": "0.2.2"
+  },
+	"RequiredInterface": 1,
+	"RequiredPermissions": [
+	],
+	"SupportedLanguages": [
+		"en"
+	],
+	"VendorIdentifier": "co.mager"
+}
