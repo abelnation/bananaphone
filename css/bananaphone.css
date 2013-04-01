@@ -1,0 +1,294 @@
+/* line 17, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+/* line 19, ../scss/bananaphone.scss */
+.hide {
+  display: none !important;
+}
+
+/* line 20, ../scss/bananaphone.scss */
+.pull-left {
+  float: left !important;
+}
+
+/* line 21, ../scss/bananaphone.scss */
+.pull-right {
+  float: right !important;
+}
+
+/*
+ *   UTILITIES
+ */
+/* ClearFix */
+/* line 28, ../scss/bananaphone.scss */
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+/* line 36, ../scss/bananaphone.scss */
+.clearfix {
+  display: inline-block;
+}
+
+/* line 37, ../scss/bananaphone.scss */
+* html .clearfix {
+  height: 1%;
+}
+
+/* line 38, ../scss/bananaphone.scss */
+.clearfix {
+  display: block;
+}
+
+/* BoxSizing */
+/* line 41, ../scss/bananaphone.scss */
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* line 47, ../scss/bananaphone.scss */
+html, body {
+  font-family: "Helvetica Neue" Helvetica arial sans-serif;
+  font-size: 15px;
+  color: white;
+  width: 100%;
+  height: 100%;
+  background: #393939;
+}
+
+/* line 59, ../scss/bananaphone.scss */
+h1 {
+  font-size: 50px;
+  font-weight: bold;
+  color: white;
+  width: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6c6c6c), color-stop(100%, #343434));
+  background-image: -webkit-linear-gradient(#6c6c6c, #343434);
+  background-image: -moz-linear-gradient(#6c6c6c, #343434);
+  background-image: -o-linear-gradient(#6c6c6c, #343434);
+  background-image: linear-gradient(#6c6c6c, #343434);
+  height: 100px;
+  margin-top: -100px;
+  line-height: 100px;
+  padding-left: 10px;
+}
+
+/* line 74, ../scss/bananaphone.scss */
+#container {
+  width: 100%;
+  height: 100%;
+  min-width: 720px;
+  float: left;
+  padding-top: 100px;
+  padding-right: 320px;
+  background: #393939;
+}
+
+/* line 88, ../scss/bananaphone.scss */
+#playlist-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 400px;
+  overflow-y: scroll;
+  border: thin solid rgba(0, 0, 0, 0.8);
+  float: left;
+}
+
+/* line 99, ../scss/bananaphone.scss */
+#playlist {
+  width: 100%;
+  font-size: 12px;
+  background: #393939;
+  border-spacing: 0px;
+  border-collapse: separate;
+}
+/* line 2, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/tables/_alternating-rows-and-columns.scss */
+#playlist tbody th {
+  background-color: white;
+}
+/* line 4, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/tables/_alternating-rows-and-columns.scss */
+#playlist tbody th.even, #playlist tbody th:nth-child(2n) {
+  background-color: white;
+}
+/* line 8, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/tables/_alternating-rows-and-columns.scss */
+#playlist tbody tr.odd td, #playlist tbody tr:nth-child(2n+1) td {
+  background-color: #333333;
+}
+/* line 10, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/tables/_alternating-rows-and-columns.scss */
+#playlist tbody tr.odd td.even, #playlist tbody tr.odd td:nth-child(2n), #playlist tbody tr:nth-child(2n+1) td.even, #playlist tbody tr:nth-child(2n+1) td:nth-child(2n) {
+  background-color: #333333;
+}
+/* line 14, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/tables/_alternating-rows-and-columns.scss */
+#playlist tbody tr.even td {
+  background-color: #393939;
+}
+/* line 16, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/tables/_alternating-rows-and-columns.scss */
+#playlist tbody tr.even td.even, #playlist tbody tr.even td:nth-child(2n) {
+  background-color: #393939;
+}
+/* line 19, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/tables/_alternating-rows-and-columns.scss */
+#playlist tbody tfoot th, #playlist tbody tfoot td {
+  background-color: white;
+}
+/* line 21, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/tables/_alternating-rows-and-columns.scss */
+#playlist tbody tfoot th.even, #playlist tbody tfoot th:nth-child(2n), #playlist tbody tfoot td.even, #playlist tbody tfoot td:nth-child(2n) {
+  background-color: white;
+}
+/* line 113, ../scss/bananaphone.scss */
+#playlist th {
+  padding: 2px 10px;
+  font-weight: bold;
+  color: #040404;
+  background: #919191;
+  text-shadow: none;
+  border-top: thin solid #c8c8c8;
+  border-right: thin solid #626262;
+  border-left: thin solid #b2b2b2;
+}
+/* line 124, ../scss/bananaphone.scss */
+#playlist th a {
+  text-decoration: none;
+}
+/* line 129, ../scss/bananaphone.scss */
+#playlist td {
+  padding: 4px 10px;
+  line-height: 15px;
+  border-bottom: thin solid #2d2d2d;
+  border-top: thin solid #3d3d3d;
+}
+/* line 136, ../scss/bananaphone.scss */
+#playlist td a {
+  text-decoration: none;
+}
+/* line 138, ../scss/bananaphone.scss */
+#playlist td a:hover {
+  text-decoration: underline;
+}
+/* line 145, ../scss/bananaphone.scss */
+#playlist tr.playing td, #playlist tr.playing td.odd, #playlist tr.playing td:nth-child(2n), #playlist tr.playing:nth-child(2n+1) td, #playlist tr.playing:nth-child(2n+1) td.odd, #playlist tr.playing:nth-child(2n+1) td:nth-child(2n) {
+  background: #1a1a1a;
+  color: #b6d483;
+}
+/* line 151, ../scss/bananaphone.scss */
+#playlist tr.selected td, #playlist tr.selected td.odd, #playlist tr.selected td:nth-child(2n), #playlist tr.selected:nth-child(2n+1) td, #playlist tr.selected:nth-child(2n+1) td.odd, #playlist tr.selected:nth-child(2n+1) td:nth-child(2n) {
+  background: #abdafc;
+  color: black;
+  text-shadow: none;
+}
+
+/* line 159, ../scss/bananaphone.scss */
+#track-social-container {
+  width: 320px;
+  height: 100%;
+  position: relative;
+  float: right;
+  overflow-y: auto;
+  margin-right: -320px;
+  border: thin solid rgba(0, 0, 0, 0.8);
+  background: #040404;
+}
+
+/* line 173, ../scss/bananaphone.scss */
+#track-social {
+  font-size: 13px;
+  background: #040404;
+}
+/* line 178, ../scss/bananaphone.scss */
+#track-social .author {
+  font-weight: bold;
+}
+/* line 181, ../scss/bananaphone.scss */
+#track-social li {
+  padding: 10px 10px;
+  border-bottom: thin solid rgba(255, 255, 255, 0.15);
+}
+
+/* line 188, ../scss/bananaphone.scss */
+.comment-field {
+  position: fixed;
+  bottom: 0;
+  width: 320px;
+  padding: 4px;
+  background: #393939;
+  border-top: thin solid rgba(255, 255, 255, 0.2);
+}
+/* line 198, ../scss/bananaphone.scss */
+.comment-field textarea {
+  width: 100%;
+  height: 48px;
+  text-align: top;
+}
+/* line 203, ../scss/bananaphone.scss */
+.comment-field textarea.focused {
+  border: thin solid #abdafc;
+}

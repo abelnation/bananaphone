@@ -7,17 +7,63 @@
         <link rel="stylesheet" type="text/css" href="sp://resources/css/list.css">
 
         <!-- Project CSS files -->
-        <link rel="stylesheet" type="text/css" href="css/thelist.css">
+        <link rel="stylesheet" type="text/css" href="css/bananaphone.css">
+
+        <!-- Playlist Templates -->
+        <script id="ich_playlist" type="text/html">
+            
+        </script>
+        <script id="ich_playlist_track" type="text/html">
+                <tr id="track-{{track_num}}" class="playlist-track" data-track-num="{{track_num}}">
+                    <!-- <td class="track-num">{{track_num}}</td> -->
+                    <td class="track-title">{{title}}</td>
+                    <td class="track-artist">{{artist}}</td>
+                    <td class="track-likes">{{num_likes}}</td>
+                    <td class="track-comments">{{num_comments}}</td>
+                    <td class="track-plays">{{num_plays}}</td>
+                </tr>
+        </script>
+
+        <script id="ich_track_social" type="text/html">
+                
+        </script>
+
+        <script id="ich_track_social_comment" type="text/html">
+                <li class="track-comment">
+                    <span class="author">{{author}}</span> {{comment}}
+                </li>
+        </script>
+        
     </head>
     <body>
-        <div id="wrapper">
-            <div id="index" class="section">
-                <h1>TheList</h1>
-                
-
+        <div id="container">
+            <h1>TheList</h1>
+            <div id="playlist-container">
+                <table id="playlist">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Artist</th>
+                            <th><img src="img/icon_star.png" /></th>
+                            <th><img src="img/icon_comment.png" /></th>
+                            <th><img src="img/icon_plays.png" /></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div id="track-social-container">
+                <ul id="track-social"></ul>
+                <div class="comment-field">
+                    <textarea placeholder="Comment on this track..." id="track-comment-field"></textarea>
+                </div>
             </div>
         </div>
-        <script src="/js/rainbow-custom.min.js"></script>
-        <script src="/js/tutorial.js"></script>
+        <script src="/js/jquery.js"></script>
+        <script src="/js/ICanHaz.min.js"></script>
+        <script src="/js/underscore-min.js"></script>
+
+        <script src="/js/bananaphone.js"></script>
     </body>
 </html>
