@@ -1,5 +1,6 @@
 var Bananaphone = (function() {
   var SERVER_URL = "http://localhost:5000/";
+  var LIST_NAME = "thelist";
   
   var self = {};
 
@@ -8,6 +9,10 @@ var Bananaphone = (function() {
 	var v = sp.require("sp://import/scripts/api/views");
 	var fx = sp.require('sp://import/scripts/fx');
 	var ui = sp.require('sp://import/scripts/ui');
+  var auth = sp.require('sp://import/scripts/api/auth');
+
+  var fb_access_token;
+  var current_user;
 
 	var selected_track_num;
   var selected_track_row;
@@ -15,18 +20,49 @@ var Bananaphone = (function() {
   var playing_track_row;
 
 	var ui_playlist;
+  var ui_selected_track_info;
+  var ui_track_controls; // track controls
 	var ui_social;
 	var ui_social_container;
+  var ui_like_button;
+  var ui_comment_button;
+
+
 
   self.init = function() {
 
     log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
 
+    setupSocialControls();
   	fetchList();
+
+    doAuth();
 
   	// When a track is dropped on the app from spotify
   	m.application.observe(m.EVENT.LINKSCHANGED, onTrackDropped);
   };
+
+  function doAuth() {
+    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
+
+    auth.authenticateWithFacebook('554341824586878', ['user_about_me'], {
+
+      onSuccess : function(accessToken, ttl) {
+        console.log("Success! Here's the access token: " + accessToken);
+
+        fb_access_token = accessToken;
+        fetchUserFacebookInfo(accessToken);
+      },
+
+      onFailure : function(error) {
+        console.log("Authentication failed with error: " + error);
+      },
+
+      onComplete : function() { }
+    });
+
+    // current_user = m.session.anonymousUserID;
+  }
 
   function selectTrack(track_num) {
   	log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
@@ -36,7 +72,11 @@ var Bananaphone = (function() {
   	}
   
   	var row = $("#track-"+track_num);
+    console.log(track_num);
+    console.log(row);
   	row.addClass("selected");
+    ui_comment_field.removeAttr('disabled');
+    ui_comment_field.focus();
 
   	selected_track_row = row;
     selected_track_num = track_num
@@ -62,10 +102,42 @@ var Bananaphone = (function() {
    * SERVER CALLS 
    */
 
+  function fetchUserFacebookInfo(accessToken) {
+    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
+
+    var url = "https://graph.facebook.com/me?access_token=" + accessToken;
+    $.ajax({
+      dataType: "json",
+      url: url,
+      data: {},
+      success: onUserInfoReceived,
+    });
+  }
+
+  function loginUser(user_info) {
+    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
+
+    var url = SERVER_URL + "login";
+    $.ajax({
+      dataType: "json",
+      url: url,
+      method: 'post',
+      data: {
+        'json': JSON.stringify({
+          id: user_info['id'],
+          username: user_info['username'],
+          link: user_info['link'],
+          name: ""+ user_info['first_name'] + " " + user_info['last_name'],
+        }),
+      },
+      success: onUserLoggedIn,
+    });
+  }
+
   function fetchList() {
     log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
 
-  	var url = SERVER_URL;
+  	var url = SERVER_URL + "list/" + LIST_NAME;
   	$.ajax({
       dataType: "json",
       url: url,
@@ -74,15 +146,36 @@ var Bananaphone = (function() {
     });
   }
 
+  function addTrack(track_data) {
+    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
+
+    var url = SERVER_URL  + "list/" + LIST_NAME + "/addtrack";
+    $.ajax({
+      dataType: "json",
+      method: "post",
+      url: url,
+      data: {
+        'json': JSON.stringify({
+          'track_data': track_data,
+          'playlist_pos': playlist_length,
+          'submitted_by': current_user
+        }),
+      },
+      success: onTrackAdded,
+    });
+  }
+
   function fetchTrackData(track_num) {
     log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
 
-  	var url = SERVER_URL + "track/" + track_num;
+  	var url = SERVER_URL  + "list/" + LIST_NAME + "/track/" + track_num;
   	$.ajax({
       dataType: "json",
       url: url,
       data: {
-      	'track_num': track_num,
+        'json': JSON.stringify({
+          'track_num': track_num,
+        }),
       },
       success: onTrackDataReceived,
     });
@@ -91,12 +184,15 @@ var Bananaphone = (function() {
   function likeTrack(track_num) {
     log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
 
-  	var url = SERVER_URL + "track/" + track_num + "/like";
+  	var url = SERVER_URL  + "list/" + LIST_NAME + "/track/" + track_num + "/like";
   	$.ajax({
       dataType: "json",
       url: url,
       data: {
-      	'track_num': track_num,
+        'json': JSON.stringify({
+          'author': current_user,
+          'track_num': track_num,
+        }),
       },
       success: onTrackLikeResponseReceived,
     });
@@ -105,14 +201,17 @@ var Bananaphone = (function() {
   function addComment(track_num, comment) {
     log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
 
-  	var url = SERVER_URL + "track/" + track_num + "/addcomment";
+  	var url = SERVER_URL + "list/" + LIST_NAME + "/track/" + track_num + "/addcomment";
   	$.ajax({
       dataType: "json",
       url: url,
+      method: "post",
       data: {
-      	'track_num': track_num,
-      	'author': "Abel Allison", // TODO
-      	'comment': comment,
+        'json': JSON.stringify({
+        	'track_num': track_num,
+        	'author': current_user,
+        	'comment': comment,
+        }),
       },
       success: onTrackCommentResponseReceived,
     });
@@ -121,13 +220,16 @@ var Bananaphone = (function() {
   function addToPlayCount(track_num) {
     log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
 
-  	var url = SERVER_URL + "track/" + track_num + "/play";
+  	var url = SERVER_URL + "list/" + LIST_NAME + "/track/" + track_num + "/play";
   	$.ajax({
       dataType: "json",
       url: url,
+      method: "POST",
       data: {
-      	'track_num': track_num,
-      	'author': "Abel Allison" // TODO
+        'json': JSON.stringify({
+          'track_num': track_num,
+          'author': current_user // TODO
+        })
       },
       success: onTrackPlayResponseReceived,
     });
@@ -137,53 +239,110 @@ var Bananaphone = (function() {
    * HANDLERS
    */
 
-  function onTrackDataUpdated(track_data) {
+  function onUserInfoReceived(user_info) {
+    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
 
+    loginUser(user_info)
+
+    console.log(user_info);
+  }
+
+  function onUserLoggedIn(user_info) {
+    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
+    console.log(user_info);
+    current_user = user_info;
+    selectTrack(selected_track_num);
+  }
+
+  function onTrackAdded(track_data) {
+    var track_elem = createPlaylistTrackItem(playlist_length, track_data);
+    playlist.tracks.push(track_data);
+    playlist_length = playlist.tracks.length;
+
+    var table_body = ui_playlist.find("tbody")
+    table_body.append(track_elem);
+  }
+
+  function onTrackDataUpdated(track_data) {
+    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
+
+    var track_num = track_data.playlist_pos;
+
+    updatePlaylistRow(track_num, track_data);
+    if(track_num == selected_track_num) {
+      selectTrack(track_num);
+
+    }
   }
 
   function onPlaylistUpdated() {
     
   }
 
+  function onLikeTrack(e) {
+    likeTrack(selected_track_num);
+  }
+
   function onPlayTrack(e) {
-  	var track_num = $(this).parent().data("track-num");
+  	var track_num = $(e.target).parent().data("track-num");
   	playTrack(track_num);
   }
 
   function onSelectTrack(e) {
-    var track_num = $(this).parent().data("track-num");
+    var track_num = $(e.target).parent().data("track-num");
     selectTrack(track_num);
   }
 
   function onCommentSubmitted(e) {
-    var comment = $(this).html();
+    var comment = $(e.target).val();
     addComment(selected_track_num, comment);
+    ui_comment_field.val("");
+    ui_comment_field.blur();
   }
 
   function onTrackDropped(app) {
 		console.log("Track dropped into app");
 		console.log(m.application.links);
+    var t = m.Track.fromURI(m.application.links[0], function(track_data) {
+      console.log(track_data);
+      addTrack(track_data);
+    });
   }
 
 
   function onPlaylistDataReceived(data, textStatus) {
-  	createPlaylistView(data);
+  	log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
+    console.log(data);
+
+    playlist = data;
+    playlist_length = playlist.tracks.length;
+
+    createPlaylistView(data);
+
+    if(data.tracks.length > 0) {
+      selectTrack(0);  
+    }
   }
 
   function onTrackDataReceived(data, textStatus) {
+    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
     showTrackData(data);
   }
 
-  function onTrackLikeResponseReceived(data, textStatus) {
-
+  function onTrackLikeResponseReceived(track_data, textStatus) {
+    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
+    if (track_data) {
+      onTrackDataUpdated(track_data);
+    }
   }
 
-  function onTrackCommentResponseReceived(data, textStatus) {
-
+  function onTrackCommentResponseReceived(track_data, textStatus) {
+    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
+    onTrackDataUpdated(track_data);
   }
 
-  function onTrackPlayResponseReceived(data, textStatus) {
-
+  function onTrackPlayResponseReceived(track_data, textStatus) {
+    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
   }
 
   /*
@@ -196,71 +355,122 @@ var Bananaphone = (function() {
     ui_playlist_container = $("playlist-container");
     ui_playlist = $("#playlist");
 
-    self.playlist = m.Playlist.fromURI("spotify:user:mattias:playlist:1PDwG4hvy5n2pBf93A8R3r");
-    // var list = new v.List(playlist);
-
     var table_body = ui_playlist.find("tbody")
     table_body.empty();
 
+    // self.playlist = m.Playlist.fromURI("spotify:user:mattias:playlist:1PDwG4hvy5n2pBf93A8R3r");
+    // var list = new v.List(playlist);
+
+    for (var i=0; i<data.tracks.length; i++) {
+      var track = data.tracks[i];
+      var track_elem = createPlaylistTrackItem(i, track);
+      table_body.append(track_elem);
+    }
+
     // Set timeout to make sure we have the playlist data 
-    setTimeout(function() {
-    	console.log("list length: " + self.playlist.data.length);
+   //  setTimeout(function() {
+   //  	console.log("list length: " + self.playlist.data.length);
 
-	    for (var i=0; i < self.playlist.data.length; i++) {
-				var track = self.playlist.get(i);
-				var track_elem = createPlaylistTrackItem(i, track);
-				table_body.append(track_elem);
-	    }
+	  //   for (var i=0; i < self.playlist.data.length; i++) {
+			// 	var track = self.playlist.get(i);
+			// 	var track_elem = createPlaylistTrackItem(i, track);
+			// 	table_body.append(track_elem);
+	  //   }
 
-	    $(".playlist-track td").click(onSelectTrack);
-		  $(".playlist-track td").dblclick(onPlayTrack);
-	  }, 200); 
+	  //   $(".playlist-track td").click(onSelectTrack);
+		 //  $(".playlist-track td").dblclick(onPlayTrack);
+	  // }, 200); 
   }
 
   function createPlaylistTrackItem(track_num, track) {
-    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
+    // log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
   	
-    var num_likes = randomInt(6);
-		var num_comments = randomInt(4);
-		var num_plays = randomInt(20);
+    var num_likes = track['num_likes'];
+		var num_comments = track['num_comments']
+		var num_plays = track['num_plays'];
 
   	var track_data = {
   		'track_num': track_num,
-  		'title': track.data.name,
-  		'artist': makeArtistString(track.data.artists),
+  		'title': track.title,
+  		// 'artist': makeArtistString(track.artist),
+      'artist': track.artist,
    		'num_likes': num_likes != 0 ? num_likes : "",
    		'num_comments': num_comments != 0 ? num_comments : "",
    		'num_plays': num_plays != 0 ? num_plays : "",
   	}
   	var elem = ich.ich_playlist_track(track_data);
 
+    elem.click(onSelectTrack);
+    elem.dblclick(onPlayTrack);
+
   	return elem;
+  }
+
+  function updatePlaylistRow(track_num, track_data) {
+    var elem = createPlaylistTrackItem(track_num, track_data);
+    $("#track-"+track_num).replaceWith(elem);
+  }
+
+  function setupSocialControls() {
+    log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
+
+    ui_social_container = $("#track-social-container");
+    ui_social = $("#track-social");   
+    ui_selected_track_info = $("#track-info");
+    ui_track_controls = $("#track-social-info");
+    ui_comment_field = $("#track-comment-field");
+
+    ui_like_button = ui_track_controls.find(".action-like");
+    ui_comment_button = ui_track_controls.find(".action-comment");
+
+    ui_like_button.click(onLikeTrack);
+    ui_comment_button.click(ui_comment_field.focus());
+
+    ui_comment_field.focus(function(e) { $(this).addClass("focused"); });
+    ui_comment_field.blur(function(e) { $(this).removeClass("focused"); });
+    ui_comment_field.keydown(function(e){
+       if(e.keyCode == 13 && !e.shiftKey) { onCommentSubmitted(e); }     
+    });
   }
 
   function showTrackData(track_data) {
     log_current_fn(arguments.callee.name, Array.prototype.slice.call(arguments));
-
-  	ui_social_container = $("#track-social-container");
-  	ui_social = $("#track-social");  	
-    ui_comment_field = $("#track-comment-field");
+    console.log(track_data);
 
     ui_social.empty();
 
-  	for (var i=0; i<10; i++) {
-  		var elem = ich.ich_track_social_comment(makeRandomComment());
+    ui_selected_track_info.empty();
+    ui_selected_track_info.html(
+      ich.ich_track_info(track_data)
+    );
+
+    if (track_data['likes'].indexOf(current_user['id']) != -1) {
+      console.log("already liked");
+      ui_like_button.addClass("sp-flat");
+    } else {
+      console.log("not liked");
+      ui_like_button.removeClass("sp-flat");
+    }
+
+    ui_social.append(ich.ich_track_social_comment_header({header: ""+track_data['num_likes']+" Likes"}));
+    ui_social.append(ich.ich_track_social_comment_header({header: ""+track_data['num_comments']+" Comments"}));
+
+  	for (var i=0; i<track_data['comments'].length; i++) {
+      var comment = track_data['comments'][i]
+      comment.timestamp = formatDate(comment.timestamp);
+  		var elem = ich.ich_track_social_comment(comment);
   		ui_social.append(elem);
   	}
-
-    ui_comment_field.focus(function(e) { $(this).addClass("focused"); });
-    ui_comment_field.blur(function(e) { $(this).removeClass("focused"); });
-    ui_comment_field.keypress(function(e){
-       if($(this).keyCode == 13) { onCommentSubmitted(e); }     
-    });
   }
 
   /*
    * UTILITY FUNCTIONS
    */ 
+
+  function formatDate(isotimestamp) {
+    var d = new Date(isotimestamp);
+    return d.toDateString();
+  }
 
   function makeRandomComment() {
     var names = ['Abel Allison', 'Steve Ritter', 'Karthi Karunanidhi', 'Andreas Brandhaugen', 'Ross Wait'];
@@ -300,6 +510,7 @@ var Bananaphone = (function() {
     //   args_str += args[i] + ", ";
     // }
     console.log("" + name + ": " + args.join);
+    console.log(args)
   }
 
   return self;

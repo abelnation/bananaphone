@@ -126,6 +126,15 @@ html, body {
 }
 
 /* line 59, ../scss/bananaphone.scss */
+a {
+  text-decoration: none;
+}
+/* line 61, ../scss/bananaphone.scss */
+a:hover {
+  text-decoration: underline;
+}
+
+/* line 66, ../scss/bananaphone.scss */
 h1 {
   font-size: 50px;
   font-weight: bold;
@@ -142,29 +151,48 @@ h1 {
   padding-left: 10px;
 }
 
-/* line 74, ../scss/bananaphone.scss */
+/* line 81, ../scss/bananaphone.scss */
 #container {
+  position: relative;
   width: 100%;
   height: 100%;
   min-width: 720px;
   float: left;
-  padding-top: 100px;
   padding-right: 320px;
   background: #393939;
 }
 
-/* line 88, ../scss/bananaphone.scss */
+/* line 94, ../scss/bananaphone.scss */
+#leftcol {
+  position: relative;
+  width: 100%;
+  min-width: 400px;
+  height: 100%;
+  padding-top: 100px;
+}
+
+/* line 104, ../scss/bananaphone.scss */
+#rightcol {
+  position: relative;
+  float: right;
+  width: 320px;
+  margin-right: -320px;
+  height: 100%;
+  overflow: hidden;
+  padding-top: 100px;
+}
+
+/* line 116, ../scss/bananaphone.scss */
 #playlist-container {
   position: relative;
   width: 100%;
   height: 100%;
-  min-width: 400px;
   overflow-y: scroll;
   border: thin solid rgba(0, 0, 0, 0.8);
   float: left;
 }
 
-/* line 99, ../scss/bananaphone.scss */
+/* line 127, ../scss/bananaphone.scss */
 #playlist {
   width: 100%;
   font-size: 12px;
@@ -204,7 +232,7 @@ h1 {
 #playlist tbody tfoot th.even, #playlist tbody tfoot th:nth-child(2n), #playlist tbody tfoot td.even, #playlist tbody tfoot td:nth-child(2n) {
   background-color: white;
 }
-/* line 113, ../scss/bananaphone.scss */
+/* line 141, ../scss/bananaphone.scss */
 #playlist th {
   padding: 2px 10px;
   font-weight: bold;
@@ -215,65 +243,141 @@ h1 {
   border-right: thin solid #626262;
   border-left: thin solid #b2b2b2;
 }
-/* line 124, ../scss/bananaphone.scss */
+/* line 152, ../scss/bananaphone.scss */
 #playlist th a {
   text-decoration: none;
 }
-/* line 129, ../scss/bananaphone.scss */
+/* line 157, ../scss/bananaphone.scss */
 #playlist td {
   padding: 4px 10px;
   line-height: 15px;
   border-bottom: thin solid #2d2d2d;
   border-top: thin solid #3d3d3d;
 }
-/* line 136, ../scss/bananaphone.scss */
+/* line 164, ../scss/bananaphone.scss */
 #playlist td a {
   text-decoration: none;
 }
-/* line 138, ../scss/bananaphone.scss */
+/* line 166, ../scss/bananaphone.scss */
 #playlist td a:hover {
   text-decoration: underline;
 }
-/* line 145, ../scss/bananaphone.scss */
+/* line 172, ../scss/bananaphone.scss */
+#playlist tr {
+  text-shadow: none;
+}
+/* line 176, ../scss/bananaphone.scss */
 #playlist tr.playing td, #playlist tr.playing td.odd, #playlist tr.playing td:nth-child(2n), #playlist tr.playing:nth-child(2n+1) td, #playlist tr.playing:nth-child(2n+1) td.odd, #playlist tr.playing:nth-child(2n+1) td:nth-child(2n) {
   background: #1a1a1a;
   color: #b6d483;
+  text-shadow: none;
 }
-/* line 151, ../scss/bananaphone.scss */
+/* line 183, ../scss/bananaphone.scss */
 #playlist tr.selected td, #playlist tr.selected td.odd, #playlist tr.selected td:nth-child(2n), #playlist tr.selected:nth-child(2n+1) td, #playlist tr.selected:nth-child(2n+1) td.odd, #playlist tr.selected:nth-child(2n+1) td:nth-child(2n) {
   background: #abdafc;
   color: black;
   text-shadow: none;
 }
 
-/* line 159, ../scss/bananaphone.scss */
+/* line 191, ../scss/bananaphone.scss */
 #track-social-container {
-  width: 320px;
   height: 100%;
+  width: 100%;
   position: relative;
-  float: right;
-  overflow-y: auto;
-  margin-right: -320px;
   border: thin solid rgba(0, 0, 0, 0.8);
   background: #040404;
 }
 
-/* line 173, ../scss/bananaphone.scss */
+/* line 203, ../scss/bananaphone.scss */
+#track-info-container {
+  height: 100px;
+  margin-top: -100px;
+  background: #040404;
+  padding: 10px;
+}
+
+/* line 210, ../scss/bananaphone.scss */
+.track-info {
+  margin-bottom: 10px;
+}
+/* line 214, ../scss/bananaphone.scss */
+.track-info .album-art {
+  width: 30px;
+  height: 30px;
+  margin-left: -40px;
+  float: left;
+}
+/* line 220, ../scss/bananaphone.scss */
+.track-info .title {
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 23px;
+}
+/* line 225, ../scss/bananaphone.scss */
+.track-info .artist {
+  font-size: 12px;
+}
+
+/* line 230, ../scss/bananaphone.scss */
+.track-social-info .action {
+  /*font-size: 13px;
+  margin-right: 20px;
+  color: white;*/
+}
+/* line 235, ../scss/bananaphone.scss */
+.track-social-info .action.sp-flat {
+  border: thin solid white;
+  background: #252525;
+}
+/* line 242, ../scss/bananaphone.scss */
+.track-social-info .action-like:after {
+  content: "Like";
+}
+/* line 243, ../scss/bananaphone.scss */
+.track-social-info .action-like.sp-flat:after {
+  content: "Liked";
+}
+
+/* line 251, ../scss/bananaphone.scss */
 #track-social {
   font-size: 13px;
   background: #040404;
+  width: 100%;
 }
-/* line 178, ../scss/bananaphone.scss */
+/* line 257, ../scss/bananaphone.scss */
+#track-social .track-comment {
+  padding-left: 70px;
+}
+/* line 260, ../scss/bananaphone.scss */
+#track-social .profile-image {
+  float: left;
+  margin-left: -60px;
+}
+/* line 264, ../scss/bananaphone.scss */
 #track-social .author {
   font-weight: bold;
 }
-/* line 181, ../scss/bananaphone.scss */
+/* line 267, ../scss/bananaphone.scss */
+#track-social .timestamp {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #666666;
+}
+/* line 273, ../scss/bananaphone.scss */
 #track-social li {
   padding: 10px 10px;
   border-bottom: thin solid rgba(255, 255, 255, 0.15);
 }
+/* line 279, ../scss/bananaphone.scss */
+#track-social li.header {
+  font-weight: bold;
+}
+/* line 281, ../scss/bananaphone.scss */
+#track-social li.header:first-child {
+  border-top: thin solid rgba(255, 255, 255, 0.15);
+}
 
-/* line 188, ../scss/bananaphone.scss */
+/* line 287, ../scss/bananaphone.scss */
 .comment-field {
   position: fixed;
   bottom: 0;
@@ -282,13 +386,13 @@ h1 {
   background: #393939;
   border-top: thin solid rgba(255, 255, 255, 0.2);
 }
-/* line 198, ../scss/bananaphone.scss */
+/* line 297, ../scss/bananaphone.scss */
 .comment-field textarea {
   width: 100%;
   height: 48px;
   text-align: top;
 }
-/* line 203, ../scss/bananaphone.scss */
+/* line 302, ../scss/bananaphone.scss */
 .comment-field textarea.focused {
   border: thin solid #abdafc;
 }

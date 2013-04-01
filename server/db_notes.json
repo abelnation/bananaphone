@@ -1,0 +1,29 @@
+{
+	'name': "thelist",
+	'last_updated': "<DateString>"
+	'tracks': [
+		{
+			'last_updated': "<DateString",
+			'spotify_uri': "<SpotifyURI>",
+			'submitted_by': "<Author_Data>",
+			'num_likes': 4,
+			'num_comments': 8,
+			'num_plays': 23,
+			'comments': [
+				{
+					'comment': "awesome!"
+					'author': <Author_Data>
+					'timestamp': "<DateString>"  // This should be js formatted for make Date objects
+					'num_likes': 3
+					},
+				{ ... }
+			],
+
+
+			},
+		{
+
+			},
+
+	]
+}

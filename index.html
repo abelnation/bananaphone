@@ -28,37 +28,65 @@
                 
         </script>
 
+        <script id="ich_track_info" type="text/html">
+                        <!-- <img class="album-art" src="" /> -->
+                        <p class="title">{{title}}</p>
+                        <p class="artist">{{artist}}</p>
+                        <div class="clearfix"></div>
+        </script>
+        <script id="ich_track_social_comment_header" type="text/html">
+                <li class="header">
+                    {{header}}
+                </li>
+        </script>
         <script id="ich_track_social_comment" type="text/html">
                 <li class="track-comment">
-                    <span class="author">{{author}}</span> {{comment}}
+                    <img class="profile-image" src="{{author.picture_url}}" />
+                    <p><span class="author">{{author.name}}</span> {{comment}}</p>
+                    <p class="timestamp">{{timestamp}}</p>
+                    <div class="clearfix"></div>
                 </li>
         </script>
         
     </head>
     <body>
         <div id="container">
-            <h1>TheList</h1>
-            <div id="playlist-container">
-                <table id="playlist">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Artist</th>
-                            <th><img src="img/icon_star.png" /></th>
-                            <th><img src="img/icon_comment.png" /></th>
-                            <th><img src="img/icon_plays.png" /></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-            <div id="track-social-container">
-                <ul id="track-social"></ul>
-                <div class="comment-field">
-                    <textarea placeholder="Comment on this track..." id="track-comment-field"></textarea>
+            <div id="rightcol">
+                <div id="track-info-container">
+                    <div id="track-info" class="track-info">
+                    </div>
+                    <div id="track-social-info" class="track-social-info">
+                        <a class="sp-button action action-like"></a>
+                        <a class="sp-button action action-comment">Comment</a>
+                    </div>
+                </div>
+                <div id="track-social-container">
+                    <ul id="track-social">
+                    </ul>
+                    <div class="comment-field">
+                        <textarea placeholder="Comment on this track..." id="track-comment-field" disabled="disabled"></textarea>
+                    </div>
                 </div>
             </div>
+            <div id="leftcol">
+                <h1>TheList</h1>
+                <div id="playlist-container">
+                    <table id="playlist">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Artist</th>
+                                <th><img src="img/icon_star.png" /></th>
+                                <th><img src="img/icon_comment.png" /></th>
+                                <th><img src="img/icon_plays.png" /></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
         <script src="/js/jquery.js"></script>
         <script src="/js/ICanHaz.min.js"></script>
